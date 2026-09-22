@@ -10,7 +10,7 @@
 | 项 | 内容 |
 |---|---|
 | 名称 | **tabby-uart-kit** |
-| 版本 | 1.0.0 |
+| 版本 | 1.0.1 |
 | 仓库 | https://github.com/jaeckzeng/tabby-uart-kit |
 | 作者 | jack (jaeck_zj@163.com) |
 | 协议 | MIT |
@@ -38,7 +38,7 @@
 
 ### 日志保存
 
-- 右键 **Save output to file...** 手动录制
+- 右键 **保存输出到文件...** 手动录制
 - 可选自动保存（全部 / 仅 SSH）
 - ANSI 处理：`strip`（纯文本）/ `raw`（保留转义序列）
 - 默认文件名：`时间戳 - COM口.log`（串口标签使用实际 COM 口名）
@@ -63,22 +63,28 @@
 
 ## 安装
 
-### 插件目录
+### 一键安装（Git Bash，推荐）
 
-1. `npm install && npm run build`
-2. 将本目录复制到 Tabby 插件目录（Settings → Plugins → Open Plugins Directory）
-3. 重启 Tabby
+先完全退出 Tabby，再在项目根目录执行：
 
-### 环境变量
-
-```powershell
-$env:TABBY_PLUGINS="d:\path\to\tabby-uart-kit"
-tabby --debug
+```bash
+npm install --legacy-peer-deps --ignore-scripts   # 首次需要
+./scripts/install-local.sh
+# 或
+npm run install:local
 ```
+
+脚本会构建并将 `package.json` + `dist/index.js` 复制到 `%APPDATA%\tabby\plugins\node_modules\tabby-uart-kit\`（**不需要** `node_modules`）。
+
+### 手动复制
+
+1. `npm run build`
+2. 将 `package.json` 和 `dist/` 复制到 Tabby 插件目录下的 `node_modules/tabby-uart-kit/`（Settings → Plugins → Open Plugins Directory）
+3. 重启 Tabby
 
 ## 配置
 
-Settings → **UART Kit**：
+设置 → **UART 工具包** / **UART Kit**（随 Tabby 语言自动切换）：
 
 - **Save Log**：自动保存、目录、ANSI 模式
 - **Highlight**：8 组 light/dark 底色（默认沿用 highlightwords 配色）

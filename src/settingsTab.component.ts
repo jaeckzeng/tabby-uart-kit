@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Component } from '@angular/core'
+import { ChangeDetectorRef, Component } from '@angular/core'
 import { ConfigService } from 'tabby-core'
 import { ElectronHostWindow, ElectronService } from 'tabby-electron'
 import { DEFAULT_HIGHLIGHT_COLORS, HIGHLIGHT_SLOT_COUNT } from './api'
 import { getSaveLogConfig } from './config'
+import { messages, resolveLocale, slotBgTitle, UartKitMessages } from './shared/i18n'
 
 /** @hidden */
 @Component({
@@ -16,8 +17,20 @@ export class UartKitSettingsTabComponent {
         public config: ConfigService,
         private electron: ElectronService,
         private hostWindow: ElectronHostWindow,
+        private cdr: ChangeDetectorRef,
     ) {
         this.ensureUartKitConfig()
+        this.config.changed$.subscribe(() => {
+            this.cdr.detectChanges()
+        })
+    }
+
+    get L (): UartKitMessages {
+        return messages(resolveLocale(this.config))
+    }
+
+    slotTitle (index: number): string {
+        return slotBgTitle(this.config, index)
     }
 
     private ensureUartKitConfig (): void {

@@ -13,24 +13,29 @@ alwaysApply: true
 ## 版本号（SemVer）
 
 - 格式：`MAJOR.MINOR.PATCH`（如 `1.0.0`）
-- 发布或功能合并前同步更新：
+- **一个版本对应一次 Git 提交**：仅在准备发布/合并时 bump 版本，日常小改动不要每个 commit 都改版本号
+- 发布时同步更新（同一 commit 内完成）：
   - `package.json` 的 `version`
-  - `CHANGELOG.md`（中文，按版本倒序）
+  - `CHANGELOG.md`（中文，按版本倒序；该版本下合并 Added/Changed/Fixed，不要拆成多个小版本条目）
+  - `README.md` 中的版本号（如有）
 - 建议约定：
   - `MAJOR`：不兼容的配置或行为变更
   - `MINOR`：向后兼容的新功能
   - `PATCH`：向后兼容的问题修复
+- 开发过程中可积累多个改动，**合并为一条 CHANGELOG + 一个版本号** 再提交
 
 ## Git 提交
 
 - 本仓库作者：`jack <jaeck_zj@163.com>`（仅 `git config --local`，不改全局）
 - 提交说明用中文，推荐 Conventional Commits：
-  - `feat:` 新功能
+  - `feat:` 新功能（含版本发布，如 `feat: 发布 v1.0.1（…）`）
   - `fix:` 修复
   - `docs:` 文档
   - `chore:` 构建/工具链
   - `refactor:` 重构（不改变行为）
-- 示例：`feat: 增加串口日志自动保存选项`
+- **版本发布提交**：一个 commit 包含该版本全部代码变更 + `CHANGELOG` + 版本号 bump
+- **非发布提交**：`docs:` / `chore:` / `refactor:` 等可不改版本；`fix:` / `feat:` 若未达发布节点也可先提交，版本号留到下次发布一并更新
+- 示例：`feat: 发布 v1.0.1（中文化、i18n、高亮回刷）`
 
 ## 项目结构
 

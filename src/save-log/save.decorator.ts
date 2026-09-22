@@ -65,6 +65,6 @@ export class SaveLogDecorator extends TerminalDecorator {
 
     private generatePath (tab: BaseTerminalTabComponent): string {
         const saveLog = getSaveLogConfig(this.config.store)
-        return generateOutputPath(tab, saveLog.autoSaveDirectory)
+        return generateOutputPath(tab, this.config, saveLog.autoSaveDirectory)
     }
 }

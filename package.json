@@ -1,6 +1,6 @@
 {
   "name": "tabby-uart-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "UART/serial terminal toolkit: log saving and manual keyword highlight",
   "keywords": [
     "tabby-plugin",
@@ -14,6 +14,7 @@
   "scripts": {
     "build": "webpack --progress --color",
     "watch": "webpack --progress --color --watch",
+    "install:local": "bash scripts/install-local.sh",
     "prepublishOnly": "npm run build"
   },
   "files": [

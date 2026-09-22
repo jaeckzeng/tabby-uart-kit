@@ -1,14 +1,16 @@
 import * as os from 'os'
 import * as path from 'path'
 import sanitizeFilename from 'sanitize-filename'
+import { ConfigService } from 'tabby-core'
 import { BaseTerminalTabComponent } from 'tabby-terminal'
+import { t } from './i18n'
 
 export function isSSHTab (tab: BaseTerminalTabComponent): boolean {
     const profile = (tab as any).profile
     return profile?.type === 'ssh'
 }
 
-function getTabDisplayName (tab: BaseTerminalTabComponent): string {
+function getTabDisplayName (tab: BaseTerminalTabComponent, config: ConfigService): string {
     const profile = (tab as any).profile
     if (profile?.type === 'serial' && profile?.options?.port) {
         return profile.options.port
@@ -19,15 +21,15 @@ function getTabDisplayName (tab: BaseTerminalTabComponent): string {
         return sessionProfile.options.port
     }
 
-    return tab.customTitle || tab.title || 'Untitled'
+    return tab.customTitle || tab.title || t(config, 'tabUntitled')
 }
 
-export function generateOutputFilename (tab: BaseTerminalTabComponent): string {
-    const outputName = new Date().toISOString() + ' - ' + getTabDisplayName(tab) + '.log'
+export function generateOutputFilename (tab: BaseTerminalTabComponent, config: ConfigService): string {
+    const outputName = new Date().toISOString() + ' - ' + getTabDisplayName(tab, config) + '.log'
     return sanitizeFilename(outputName)
 }
 
-export function generateOutputPath (tab: BaseTerminalTabComponent, directory?: string | null): string {
+export function generateOutputPath (tab: BaseTerminalTabComponent, config: ConfigService, directory?: string | null): string {
     const outputPath = directory || os.homedir()
-    return path.join(outputPath, generateOutputFilename(tab))
+    return path.join(outputPath, generateOutputFilename(tab, config))
 }

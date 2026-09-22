@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { ConfigService, ThemesService } from 'tabby-core'
 import { BaseSession, BaseTerminalTabComponent, TerminalDecorator } from 'tabby-terminal'
 import { UartKitHighlightTab } from '../api'
+import { appendCleanBuffer, resetCleanBuffer, syncCleanBufferBaseline } from './highlight.buffer'
 import { HighlightService } from './highlight.service'
 import { processHighlightOutput } from './highlight.processor'
 
@@ -19,10 +20,21 @@ export class HighlightDecorator extends TerminalDecorator {
         const highlightTab = tab as UartKitHighlightTab
         this.highlightService.ensureTabState(highlightTab)
 
+        if (tab.frontendReady$) {
+            tab.frontendReady$.subscribe(() => {
+                syncCleanBufferBaseline(highlightTab)
+            })
+        }
+        if (tab.frontendIsReady) {
+            syncCleanBufferBaseline(highlightTab)
+        }
+
         if (tab.sessionChanged$) {
             tab.sessionChanged$.subscribe(session => {
+                resetCleanBuffer(highlightTab)
                 if (session) {
                     this.attachToSession(session, highlightTab)
+                    setTimeout(() => syncCleanBufferBaseline(highlightTab), 0)
                 }
             })
         }
@@ -40,6 +52,7 @@ export class HighlightDecorator extends TerminalDecorator {
 
         const originalEmit = session.emitOutput.bind(session)
         session.emitOutput = (data: Buffer) => {
+            appendCleanBuffer(tab, data)
             data = processHighlightOutput(data, tab, this.config, this.themes)
             originalEmit(data)
         }

@@ -41,11 +41,69 @@ export function processHighlightOutput (
     return Buffer.from(highlightedLines.join('\r\n'))
 }
 
-function hasActiveSlots (state: UartKitHighlightTabState): boolean {
+export function hasActiveSlots (state: UartKitHighlightTabState): boolean {
     return state.slots.some(s => s.enabled && s.keyword)
 }
 
-function highlightLine (
+const UART_HIGHLIGHT_OPEN = /^\x1b\[48;2;\d+;\d+;\d+;38;2;\d+;\d+;\d+m/
+const UART_HIGHLIGHT_CLOSE = /^\x1b\[49;39m/
+
+/** 去掉本插件注入的逐字高亮 ANSI，便于回刷缓冲区 */
+export function stripUartKitHighlightAnsi (text: string): string {
+    let result = ''
+    let i = 0
+
+    while (i < text.length) {
+        const rest = text.slice(i)
+        const open = rest.match(UART_HIGHLIGHT_OPEN)
+        if (open && open.index === 0) {
+            i += open[0].length
+            let char = text[i] ?? ''
+            const charCode = char.charCodeAt(0)
+            if (charCode >= 0xd800 && charCode <= 0xdfff) {
+                char += text[i + 1] ?? ''
+                i += 2
+            } else {
+                i += 1
+            }
+            result += char
+            const close = text.slice(i).match(UART_HIGHLIGHT_CLOSE)
+            if (close && close.index === 0) {
+                i += close[0].length
+            }
+            continue
+        }
+
+        const csiMatch = rest.match(/\x1b\[[0-9;?]*[0-9a-zA-Z@]/)
+        if (csiMatch && csiMatch.index === 0) {
+            result += csiMatch[0]
+            i += csiMatch[0].length
+            continue
+        }
+
+        result += text[i]
+        i++
+    }
+
+    return result
+}
+
+export function applyHighlightsToText (
+    text: string,
+    state: UartKitHighlightTabState,
+    config: ConfigService,
+    themes: ThemesService,
+): string {
+    if (!hasActiveSlots(state)) {
+        return text
+    }
+
+    const lines = text.split('\r\n')
+    const highlightedLines = lines.map(line => highlightLine(line, state, config, themes))
+    return highlightedLines.join('\r\n')
+}
+
+export function highlightLine (
     line: string,
     state: UartKitHighlightTabState,
     config: ConfigService,

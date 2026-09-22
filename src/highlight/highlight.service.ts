@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core'
 import { ToastrService } from 'ngx-toastr'
-import { AppService, HotkeysService, SplitTabComponent } from 'tabby-core'
+import { AppService, ConfigService, HotkeysService, SplitTabComponent, ThemesService } from 'tabby-core'
 import { BaseTerminalTabComponent } from 'tabby-terminal'
+import { t } from '../shared/i18n'
+import { refreshTerminalHighlights } from './highlight.refresh'
 import {
     createEmptyHighlightState,
     HIGHLIGHT_SLOT_COUNT,
@@ -15,6 +17,8 @@ export class HighlightService {
         private app: AppService,
         private hotkeys: HotkeysService,
         private toastr: ToastrService,
+        private config: ConfigService,
+        private themes: ThemesService,
     ) {
         this.hotkeys.hotkey$.subscribe(hotkey => {
             if (hotkey === 'uart-toggle-highlight') {
@@ -55,7 +59,7 @@ export class HighlightService {
 
         const selection = (tab.frontend?.getSelection() ?? '').trim()
         if (!selection) {
-            this.toastr.info('请先选中要高亮的文字')
+            this.toastr.info(t(this.config, 'toastSelectTextFirst'))
             return
         }
 
@@ -65,7 +69,10 @@ export class HighlightService {
         if (existingIndex >= 0) {
             const slot = state.slots[existingIndex]
             slot.enabled = !slot.enabled
-            this.toastr.info(slot.enabled ? `已启用高亮: ${selection}` : `已取消高亮: ${selection}`)
+            this.toastr.info(slot.enabled
+                ? t(this.config, 'toastHighlightEnabled', { text: selection })
+                : t(this.config, 'toastHighlightDisabled', { text: selection }))
+            refreshTerminalHighlights(tab, this.config, this.themes)
             return
         }
 
@@ -76,7 +83,8 @@ export class HighlightService {
         slot.colorIndex = slotIndex
 
         state.activeSlot = (slotIndex + 1) % HIGHLIGHT_SLOT_COUNT
-        this.toastr.info(`槽位 ${slotIndex + 1} 已标记: ${selection}`)
+        this.toastr.info(t(this.config, 'toastSlotMarked', { slot: slotIndex + 1, text: selection }))
+        refreshTerminalHighlights(tab, this.config, this.themes)
     }
 
     clearCurrentTabHighlights (): void {
@@ -88,6 +96,7 @@ export class HighlightService {
         for (const slot of tab.uartKitHighlight.slots) {
             slot.enabled = false
         }
-        this.toastr.info('已清除当前窗口全部高亮')
+        this.toastr.info(t(this.config, 'toastClearedAll'))
+        refreshTerminalHighlights(tab, this.config, this.themes)
     }
 }

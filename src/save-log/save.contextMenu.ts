@@ -6,7 +6,9 @@ import { ElectronService, ElectronHostWindow } from 'tabby-electron'
 import { BaseTerminalTabComponent, TerminalContextMenuItemProvider } from 'tabby-terminal'
 import { getSaveLogConfig } from '../config'
 import { processOutput } from '../shared/ansi.util'
+import { t } from '../shared/i18n'
 import { generateOutputPath } from '../shared/tab.util'
+import { renderSaveUi } from './save.ui'
 
 import './save.styles.scss'
 
@@ -26,7 +28,7 @@ export class SaveLogContextMenu extends TerminalContextMenuItemProvider {
     async getItems (tab: BaseTerminalTabComponent): Promise<MenuItemOptions[]> {
         return [
             {
-                label: 'Save output to file...',
+                label: t(this.config, 'menuSaveOutput'),
                 click: () => {
                     setTimeout(() => this.start(tab))
                 },
@@ -42,7 +44,7 @@ export class SaveLogContextMenu extends TerminalContextMenuItemProvider {
         const saveLog = getSaveLogConfig(this.config.store)
         let path = this.electron.dialog.showSaveDialogSync(
             this.hostWindow.getWindow(),
-            { defaultPath: generateOutputPath(tab, saveLog.autoSaveDirectory) }
+            { defaultPath: generateOutputPath(tab, this.config, saveLog.autoSaveDirectory) }
         )
 
         if (!path) {
@@ -52,7 +54,7 @@ export class SaveLogContextMenu extends TerminalContextMenuItemProvider {
         let ui: HTMLElement = document.createElement('div')
         ui.classList.add('uart-kit-save-ui')
         tab.element.nativeElement.querySelector('.content').appendChild(ui)
-        ui.innerHTML = require('./save.ui.pug')
+        ui.innerHTML = renderSaveUi(this.config)
 
         let stream = fs.createWriteStream(path)
         const ansiMode = saveLog.ansiMode || 'strip'
@@ -70,7 +72,7 @@ export class SaveLogContextMenu extends TerminalContextMenuItemProvider {
             tab.element.nativeElement.querySelector('.content').removeChild(ui)
             subscription.unsubscribe()
             stream.end()
-            this.toastr.info('File saved')
+            this.toastr.info(t(this.config, 'toastLogSaved'))
         })
     }
 }

@@ -12,7 +12,6 @@ import { SaveLogDecorator } from './save-log/save.decorator'
 import { SaveLogContextMenu } from './save-log/save.contextMenu'
 import { HighlightDecorator } from './highlight/highlight.decorator'
 import { HighlightHotkeyProvider } from './highlight/highlight.hotkeys'
-import { HighlightContextMenu } from './highlight/highlight.contextMenu'
 import { HighlightService } from './highlight/highlight.service'
 
 @NgModule({
@@ -29,7 +28,6 @@ import { HighlightService } from './highlight/highlight.service'
         { provide: TerminalDecorator, useClass: SaveLogDecorator, multi: true },
         { provide: TerminalDecorator, useClass: HighlightDecorator, multi: true },
         { provide: TerminalContextMenuItemProvider, useClass: SaveLogContextMenu, multi: true },
-        { provide: TerminalContextMenuItemProvider, useClass: HighlightContextMenu, multi: true },
     ],
     entryComponents: [
         UartKitSettingsTabComponent,

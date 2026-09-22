@@ -1,38 +1,38 @@
-h3 UART Kit
+h3 {{ L.settingsTitle }}
 
-h4 Save Log
+h4 {{ L.saveLogSection }}
 
 .form-line
     .header
-        .title ANSI color handling
-        .description How to handle terminal color codes in saved logs
+        .title {{ L.ansiTitle }}
+        .description {{ L.ansiDesc }}
     select.form-control(
         [(ngModel)]='saveLog.ansiMode',
         (ngModelChange)='onSaveLogChange()'
     )
-        option(ngValue='strip') Strip ANSI colors (plain text)
-        option(ngValue='raw') Keep ANSI colors (raw)
+        option(ngValue='strip') {{ L.ansiStrip }}
+        option(ngValue='raw') {{ L.ansiRaw }}
 
 .form-line
     .header
-        .title Automatically save output for new tabs
-        .description Stores complete session logs in a directory
+        .title {{ L.autoSaveTitle }}
+        .description {{ L.autoSaveDesc }}
     select.form-control(
         [(ngModel)]='saveLog.autoSave',
         (ngModelChange)='onSaveLogChange()'
     )
-        option(ngValue='on') On
-        option(ngValue='ssh') For SSH only
-        option(ngValue='off') Off
+        option(ngValue='on') {{ L.autoSaveOn }}
+        option(ngValue='ssh') {{ L.autoSaveSsh }}
+        option(ngValue='off') {{ L.autoSaveOff }}
 
 .form-line(*ngIf='saveLog.autoSave !== "off"')
     .header
-        .title Directory
-        .description Destination path for the logs
+        .title {{ L.directoryTitle }}
+        .description {{ L.directoryDesc }}
     .input-group
         input.form-control(
             type='text',
-            placeholder='Home directory',
+            [placeholder]='L.homeDirectoryPlaceholder',
             [(ngModel)]='saveLog.autoSaveDirectory',
             (ngModelChange)='onSaveLogChange()'
         )
@@ -40,33 +40,31 @@ h4 Save Log
             button.btn.btn-secondary((click)='pickDirectory()')
                 i.fas.fa-folder-open
 
-h4.mt-4 Highlight
+h4.mt-4 {{ L.highlightSection }}
 
-p.text-muted
-    | Select text in terminal and press F8 to mark/unmark. Shift+F8 clears all highlights in the current tab.
-    | Style: bright background + black text. Each slot uses a different color.
+p.text-muted {{ L.highlightHelp }}
 
 .form-line(*ngFor='let color of config.store.uartKit.highlight.colors; let i = index')
     .header
-        .title Slot {{ i + 1 }} background colors
-        .description Light theme / Dark theme
+        .title {{ slotTitle(i) }}
+        .description {{ L.slotBgDesc }}
     .input-group
         input.form-control(
             type='text',
-            placeholder='Light (#hex)',
+            [placeholder]='L.lightPlaceholder',
             [(ngModel)]='color.light',
             (ngModelChange)='onHighlightChange()'
         )
         input.form-control(
             type='text',
-            placeholder='Dark (name or #hex)',
+            [placeholder]='L.darkPlaceholder',
             [(ngModel)]='color.dark',
             (ngModelChange)='onHighlightChange()'
         )
 
 .form-line
     .header
-        .title Hotkeys
-        .description Configure in Settings → Hotkeys
-    p.mb-0 F8 — toggle highlight on selected text
-    p.mb-0 Shift+F8 — clear all highlights in current tab
+        .title {{ L.hotkeysTitle }}
+        .description {{ L.hotkeysDesc }}
+    p.mb-0 {{ L.hotkeyToggleHelp }}
+    p.mb-0 {{ L.hotkeyClearHelp }}

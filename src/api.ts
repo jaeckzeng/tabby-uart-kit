@@ -20,6 +20,8 @@ export interface UartKitHighlightTabState {
 
 export interface UartKitHighlightTab extends BaseTerminalTabComponent {
     uartKitHighlight?: UartKitHighlightTabState
+    /** 未经本插件高亮的终端序列化内容，用于回刷/取消高亮 */
+    uartKitCleanSerialized?: string
 }
 
 export const HIGHLIGHT_SLOT_COUNT = 8

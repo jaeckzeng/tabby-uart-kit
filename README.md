@@ -1,6 +1,36 @@
 # UART Kit for Tabby
 
-串口 / UART 调试终端工具插件：日志保存 + 手动关键字高亮。
+[![npm](https://img.shields.io/npm/v/tabby-uart-kit?label=version)](https://www.npmjs.com/package/tabby-uart-kit)
+[![license](https://img.shields.io/github/license/jaeckzeng/tabby-uart-kit)](LICENSE)
+
+> Tabby 串口 / UART 调试工具插件：**日志保存** + **手动关键字高亮**，面向嵌入式开发时分析串口输出。
+
+## 项目说明
+
+| 项 | 内容 |
+|---|---|
+| 名称 | **tabby-uart-kit** |
+| 版本 | 1.0.0 |
+| 仓库 | https://github.com/jaeckzeng/tabby-uart-kit |
+| 作者 | jack (jaeck_zj@163.com) |
+| 协议 | MIT |
+| 类型 | Tabby 插件（`tabby-plugin`） |
+
+**适用场景**
+
+- 串口调试时保存完整会话日志（`.log`），支持 ANSI 过滤或原样保留
+- 分析大量 log 时，手动标记关键字并着色区分（ERROR、模块名、地址等）
+- 多窗口并行调试，各窗口高亮标记互不影响
+
+**一句话描述（可用于 GitHub About）**
+
+> Tabby 串口调试插件：保存 UART 日志到文件，支持 8 色手动关键字高亮（F8 / Shift+F8）。
+
+**推荐 Topics**
+
+`tabby-plugin` `tabby` `uart` `serial` `embedded` `log` `highlight` `terminal`
+
+---
 
 基于 [Eugeny/tabby-save-output](https://github.com/Eugeny/tabby-save-output) fork 并扩展。高亮实现参考 [moemoechu/tabby-highlight](https://github.com/moemoechu/tabby-highlight)。
 

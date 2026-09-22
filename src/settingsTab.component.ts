@@ -41,7 +41,16 @@ export class UartKitSettingsTabComponent {
                     foregroundColor: '#000000',
                     colors: [],
                 },
+                tabTitles: {
+                    persist: true,
+                    byPort: {},
+                },
             }
+        }
+        if (!this.config.store.uartKit.tabTitles || typeof this.config.store.uartKit.tabTitles !== 'object') {
+            this.config.store.uartKit.tabTitles = { persist: true, byPort: {} }
+        } else if (!this.config.store.uartKit.tabTitles.byPort) {
+            this.config.store.uartKit.tabTitles.byPort = {}
         }
         if (!this.config.store.uartKit.highlight?.colors?.length) {
             this.config.store.uartKit.highlight.colors = DEFAULT_HIGHLIGHT_COLORS

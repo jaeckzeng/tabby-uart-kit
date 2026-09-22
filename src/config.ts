@@ -14,6 +14,10 @@ export class UartKitConfigProvider extends ConfigProvider {
                 foregroundColor: '#000000',
                 colors: DEFAULT_HIGHLIGHT_COLORS,
             },
+            tabTitles: {
+                persist: true,
+                byPort: {},
+            },
         },
         hotkeys: {
             'uart-toggle-highlight': ['F8'],

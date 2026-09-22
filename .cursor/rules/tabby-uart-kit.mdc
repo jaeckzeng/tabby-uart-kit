@@ -44,7 +44,12 @@ src/
 ├── index.ts, config.ts, api.ts, settings*
 ├── shared/       # 通用工具（ansi、tab、color）
 ├── save-log/     # 日志保存
-└── highlight/    # 关键字高亮（每窗口 8 槽，F8 / Shift+F8）
+├── highlight/    # 关键字高亮（每窗口 8 槽，F8 / Shift+F8）
+└── tab-title/    # 串口标签名持久化（按 COM 口、重复窗口后缀）
+    ├── tab-title.config.ts   # 配置读写（_store + ConfigProxy）
+    ├── tab-title.util.ts     # 后缀、标签栏定位、串口标签收集
+    ├── tab-title.service.ts  # 同步 / 重命名检测 / 应用标题
+    └── tab-title.decorator.ts# 挂载到 SerialTab，订阅事件
 ```
 
 - 配置命名空间：`uartKit`（兼容旧 `saveOutput` 读取）

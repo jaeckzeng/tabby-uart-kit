@@ -2,6 +2,19 @@
 
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)（SemVer）。
 
+## 1.1.0 — 2026-09-22
+
+### Added
+
+- 串口标签名持久化：按 COM 口保存自定义名称至 `uartKit.tabTitles.byPort`
+- 重开同口标签自动恢复名称；重复打开同口时自动追加 `(2)`、`(3)` 后缀
+- 新增 `tab-title/` 模块（config / util / service / decorator）
+
+### Fixed
+
+- 修复重命名仅首次生效：先检测用户重命名再同步，避免旧配置覆盖新名称
+- 修复已有 `customTitle` 时再次重命名不触发保存的问题
+
 ## 1.0.1 — 2026-09-22
 
 ### Added

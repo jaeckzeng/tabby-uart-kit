@@ -1,6 +1,6 @@
 {
   "name": "tabby-uart-kit",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "UART/serial terminal toolkit: log saving and manual keyword highlight",
   "keywords": [
     "tabby-plugin",

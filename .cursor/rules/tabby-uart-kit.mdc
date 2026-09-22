@@ -1,0 +1,60 @@
+---
+description: tabby-uart-kit 项目规范（中文、版本、提交、目录结构）
+alwaysApply: true
+---
+
+# tabby-uart-kit 项目规则
+
+## 语言
+
+- 与用户交流、文档说明、CHANGELOG、Git 提交说明：**使用中文**
+- 代码标识符、npm 包名、Tabby API、技术术语可保留英文
+
+## 版本号（SemVer）
+
+- 格式：`MAJOR.MINOR.PATCH`（如 `1.0.0`）
+- 发布或功能合并前同步更新：
+  - `package.json` 的 `version`
+  - `CHANGELOG.md`（中文，按版本倒序）
+- 建议约定：
+  - `MAJOR`：不兼容的配置或行为变更
+  - `MINOR`：向后兼容的新功能
+  - `PATCH`：向后兼容的问题修复
+
+## Git 提交
+
+- 本仓库作者：`jack <jaeck_zj@163.com>`（仅 `git config --local`，不改全局）
+- 提交说明用中文，推荐 Conventional Commits：
+  - `feat:` 新功能
+  - `fix:` 修复
+  - `docs:` 文档
+  - `chore:` 构建/工具链
+  - `refactor:` 重构（不改变行为）
+- 示例：`feat: 增加串口日志自动保存选项`
+
+## 项目结构
+
+```
+src/
+├── index.ts, config.ts, api.ts, settings*
+├── shared/       # 通用工具（ansi、tab、color）
+├── save-log/     # 日志保存
+└── highlight/    # 关键字高亮（每窗口 8 槽，F8 / Shift+F8）
+```
+
+- 配置命名空间：`uartKit`（兼容旧 `saveOutput` 读取）
+- 插件关键字：`tabby-plugin`；入口：`dist/index.js`
+
+## 高亮产品约束
+
+- 默认无高亮；仅用户选中文字 + F8 手动标记
+- 每终端窗口独立 8 槽；Shift+F8 仅清除当前窗口
+- 样式：**明亮底色 + 黑字**；8 组 light/dark 主题色
+- 高亮只影响终端显示，不改变 strip 模式日志内容
+
+## 构建
+
+```powershell
+npm install --legacy-peer-deps --ignore-scripts
+npm run build
+```

@@ -1,0 +1,72 @@
+h3 UART Kit
+
+h4 Save Log
+
+.form-line
+    .header
+        .title ANSI color handling
+        .description How to handle terminal color codes in saved logs
+    select.form-control(
+        [(ngModel)]='saveLog.ansiMode',
+        (ngModelChange)='onSaveLogChange()'
+    )
+        option(ngValue='strip') Strip ANSI colors (plain text)
+        option(ngValue='raw') Keep ANSI colors (raw)
+
+.form-line
+    .header
+        .title Automatically save output for new tabs
+        .description Stores complete session logs in a directory
+    select.form-control(
+        [(ngModel)]='saveLog.autoSave',
+        (ngModelChange)='onSaveLogChange()'
+    )
+        option(ngValue='on') On
+        option(ngValue='ssh') For SSH only
+        option(ngValue='off') Off
+
+.form-line(*ngIf='saveLog.autoSave !== "off"')
+    .header
+        .title Directory
+        .description Destination path for the logs
+    .input-group
+        input.form-control(
+            type='text',
+            placeholder='Home directory',
+            [(ngModel)]='saveLog.autoSaveDirectory',
+            (ngModelChange)='onSaveLogChange()'
+        )
+        .input-group-append
+            button.btn.btn-secondary((click)='pickDirectory()')
+                i.fas.fa-folder-open
+
+h4.mt-4 Highlight
+
+p.text-muted
+    | Select text in terminal and press F8 to mark/unmark. Shift+F8 clears all highlights in the current tab.
+    | Style: bright background + black text. Each slot uses a different color.
+
+.form-line(*ngFor='let color of config.store.uartKit.highlight.colors; let i = index')
+    .header
+        .title Slot {{ i + 1 }} background colors
+        .description Light theme / Dark theme
+    .input-group
+        input.form-control(
+            type='text',
+            placeholder='Light (#hex)',
+            [(ngModel)]='color.light',
+            (ngModelChange)='onHighlightChange()'
+        )
+        input.form-control(
+            type='text',
+            placeholder='Dark (name or #hex)',
+            [(ngModel)]='color.dark',
+            (ngModelChange)='onHighlightChange()'
+        )
+
+.form-line
+    .header
+        .title Hotkeys
+        .description Configure in Settings → Hotkeys
+    p.mb-0 F8 — toggle highlight on selected text
+    p.mb-0 Shift+F8 — clear all highlights in current tab

@@ -10,7 +10,7 @@
 | 项 | 内容 |
 |---|---|
 | 名称 | **tabby-uart-kit** |
-| 版本 | 1.1.0 |
+| 版本 | 1.1.2 |
 | 仓库 | https://github.com/jaeckzeng/tabby-uart-kit |
 | 作者 | jack (jaeck_zj@163.com) |
 | 协议 | MIT |

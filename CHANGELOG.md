@@ -2,6 +2,18 @@
 
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)（SemVer）。
 
+## 1.1.2 — 2026-09-23
+
+### Fixed
+
+- 移除 `peerDependencies`：插件已 webpack 打包且运行时由 Tabby 提供 Angular / tabby-*，与 `tabby-windy-quick-commands` 等插件一致，避免 `npm install` 触发 Angular 版本树冲突
+
+## 1.1.1 — 2026-09-23
+
+### Fixed
+
+- 修正 `peerDependencies`：移除过时的 `@angular/core@^4`，改为 `*` 声明（仍会在部分环境下触发 npm 依赖树冲突，已在 1.1.2 彻底移除）
+
 ## 1.1.0 — 2026-09-22
 
 ### Added
